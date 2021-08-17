@@ -17,8 +17,8 @@ class Xdesign {
     return this._design
   }
 
-  useObject() {
-    return { embeds: [ this._design ] }
+  useObject () {
+    return { embeds: [this._design] }
   }
 }
 
@@ -45,11 +45,10 @@ class Xdesigner {
     return design
   }
 
-  async use (name, ...rest) {
+  use (name, ...rest) {
     const design = this.find(name)
     if (design) {
-      design().use(rest)
-      return name
+      return design.use(rest)
     } else {
       throw XDError({
         code: '404',
@@ -61,18 +60,17 @@ class Xdesigner {
 
   /**
    * As of discord.js v13 you must send embeds using object.
-   * 
+   *
    * You can use
    * ```
    * msg.channel.send(pl.designs.useObject('designName', ...))
    * ```
    * to send an embed straightaway.
    */
-  async useObject (name, ...rest) {
+  useObject (name, ...rest) {
     const design = this.find(name)
     if (design) {
-      design().useObject(rest)
-      return name
+      return design.useObject(rest)
     } else {
       throw XDError({
         code: '404',
