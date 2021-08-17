@@ -1,31 +1,12 @@
-const { EventEmitter } = require('events')
 const { Collection } = require('discord.js')
 const { FoxDispatcher } = require('@modularium/fox')
+const { SlashDispatcher } = require('./SlashDispatcher')
 const moment = require('moment')
 
 class RopeError extends Error {
   constructor (message) {
     super(message)
     this.name = 'RopeError'
-  }
-}
-
-class RopeModule extends EventEmitter {
-  /**
-     * Callback used by myFunction.
-     * @callback plugin
-     * @param {RopePlugin} plugin
-     * @param {object} config
-     * @returns {void}
-     */
-
-  /**
-     * RopeModule
-     * @param {plugin} plugin
-     */
-  constructor (plugin) {
-    super()
-    this.plugin = plugin
   }
 }
 
@@ -44,6 +25,26 @@ class RopePlugin {
     }
 
     this.commands = new FoxDispatcher()
+
+    const slashCommands = new SlashDispatcher()
+
+    slashCommands.deploy = async (cfg) => {
+      slashCommands._commands.forEach(async (command) => {
+        const deployingCommand = command.toDeploy()
+
+        if (Array.isArray(cfg.guildId)) {
+          cfg.guildId.forEach(async guildId => {
+            if (cfg.global) { await this.bot.application.commands.create(deployingCommand) } else { await this.bot.guilds.cache.get(guildId).commands.create(deployingCommand) }
+          })
+
+          return
+        }
+
+        if (cfg.global) { await this.bot.application.commands.create(deployingCommand) } else { await this.bot.guilds.cache.get(cfg.guildId).commands.create(deployingCommand) }
+      })
+    }
+
+    this.slashCommands = slashCommands
 
     this.log = (message, prefix) => {
       const prefixes = [moment().format('HH:mm:ss'), prefix].filter(Boolean)
@@ -67,7 +68,6 @@ class RopePlugin {
 }
 
 module.exports = {
-  RopeModule,
-  RopeError,
-  RopePlugin
+  RopePlugin,
+  RopeError
 }
