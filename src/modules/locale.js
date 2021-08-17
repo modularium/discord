@@ -18,7 +18,7 @@ module.exports = async (plugin, config) => {
         return
       }
       const jsdata = JSON.parse(data)
-  
+
       Object.entries(jsdata).forEach(([key, val]) => {
         plugin.locale.add(key, val)
       })
