@@ -27,15 +27,11 @@ module.exports = async (plugin, config) => {
     clearInterval(spinner)
 
     if (config.bot.generateLink === true) {
-      plugin.bot.generateInvite({
-        permissions: ['ADMINISTRATOR']
+      const link = plugin.bot.generateInvite({
+        scopes: ['bot', ...config.bot.linkScopes],
+        permissions: config.bot.linkPermissions
       })
-        .then(link => {
-          plugin.info(plugin.localeString('invitelink', link))
-        })
-        .catch(err => {
-          plugin.err(err)
-        })
+      plugin.info(plugin.localeString('invitelink', link))
     }
     // plugin.bot.user.setUsername(config.user.name || 'ModulariumBot')
   })

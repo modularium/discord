@@ -4,3 +4,4 @@ package-lock.json
 !/modules/readme.md
 /config.json
 /yarn.lock
+/config.js

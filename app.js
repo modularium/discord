@@ -1,4 +1,8 @@
-const config = require('./config.json')
 const modularium = require('./src/index')
 
-modularium.run(config)
+/**
+ * JSON config is now deprecated.
+ * 
+ * Reason: https://discordjs.guide/additional-info/changes-in-v13.html#intents
+ */
+modularium.run(require('./config'))
